@@ -1,6 +1,6 @@
 import unittest
 
-from vpsc.models import UpdateServer, ShutdownServer, UpdateHost
+from vpsc.models.custom import UpdateServer, ShutdownServer, UpdateHost
 from vpsc.client import Client, APIConfig
 from tests.patch_request import patch_request
 

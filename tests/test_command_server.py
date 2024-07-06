@@ -149,3 +149,27 @@ class TestCommandServer(unittest.TestCase):
         assert 2 == result.exit_code
         result = self.runner.invoke(vpsc, ["server", "ptr-record", "-id", "12345", "-t", "ipv6", "-h"])
         assert 2 == result.exit_code
+
+
+class TestCommandNfsServer(unittest.TestCase):
+    def setUp(self):
+        patcher = mock.patch("vpsc.commands.Client")
+        self.addCleanup(patcher.stop)
+        self.mock_client = patcher.start().return_value
+
+        patcher = mock.patch("vpsc.commands.APIConfig")
+        self.addCleanup(patcher.stop)
+        patcher.start()
+
+        patcher = mock.patch("vpsc.commands._print")
+        self.addCleanup(patcher.stop)
+        self.mock_print = patcher.start()
+
+        self.runner = CliRunner()
+
+    def test_list(self):
+        self.mock_client.get_nfs_servers.return_value = ["result"]
+        result = self.runner.invoke(vpsc, ["nfs-server", "list"])
+        assert 0 == result.exit_code
+        self.mock_client.get_nfs_servers.assert_called()
+        self.mock_print.assert_called_once_with("result")

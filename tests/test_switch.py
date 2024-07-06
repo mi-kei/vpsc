@@ -1,6 +1,6 @@
 import unittest
 
-from vpsc.models import CreateSwitch, UpdateSwitch
+from vpsc.models.custom import CreateSwitch, UpdateSwitch
 from vpsc.client import Client, APIConfig
 from tests.patch_request import patch_request
 

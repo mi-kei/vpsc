@@ -3,22 +3,18 @@ from typing import Optional, Iterable, List
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-from .api_request import APIRequest
-from .models import (
+from .models.custom import (
     server_sort_query,
-    Server,
     UpdateServer,
-    ServerPowerStatus,
-    UpdateHost,
-    NfsServer,
-    NfsServerPowerStatus,
-    CreateSwitch,
-    Switch,
-    UpdateSwitch,
-    UpdateNfsServerIpv4,
     ShutdownServer,
+    UpdateHost,
     UpdateNfsServer,
+    UpdateNfsServerIpv4,
+    CreateSwitch,
+    UpdateSwitch,
 )
+from .models.generated import Server, ServerPowerStatus, NfsServer, NfsServerPowerStatus, Switch
+from .api_request import APIRequest
 
 
 class APIConfig(BaseSettings):
