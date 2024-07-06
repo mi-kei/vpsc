@@ -7,8 +7,8 @@ from time import sleep
 import click
 from pydantic import BaseModel
 
+from .models.custom import UpdateServer, UpdateHost, UpdateNfsServer, UpdateNfsServerIpv4
 from .exceptions import exception_handler, APIException
-from .models import UpdateServer, UpdateHost, UpdateNfsServer, UpdateNfsServerIpv4
 from .client import APIConfig, Client
 
 
