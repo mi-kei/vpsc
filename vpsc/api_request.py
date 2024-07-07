@@ -83,11 +83,12 @@ class APIRequest(Iterator, Sized):
         if result is None:
             return None
 
-        if self.count > 0 and result.get("results", False):
+        if result.get("results"):
             self.generator = self.__generator(prefetch_data=result, response_obj=response_obj, per_page=10, **req_data)
             return self
-        else:
+        elif self.count == 1:
             return response_obj(**result)
+        return []
 
     def _fetch(self, **req_data) -> Optional[dict]:
         res = requests.request(**req_data)

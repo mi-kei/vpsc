@@ -30,6 +30,16 @@ class TestServers(unittest.TestCase):
             headers={"Authorization": f"Bearer {self.client.config.api_key}"},
         )
 
+    @patch_request("empty_list_200")
+    def test_get_servers_empty(self, patched):
+        servers = self.client.get_servers()
+        assert 0 == len(servers)
+        patched.assert_called_once_with(
+            method="get",
+            url=f"{self.client.config.host}/servers",
+            headers={"Authorization": f"Bearer {self.client.config.api_key}"},
+        )
+
     @patch_request("server_200")
     def test_update_servers(self, patched):
         data = UpdateServer(name="name_test", description="description_test")
