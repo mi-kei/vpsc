@@ -133,25 +133,25 @@ class TestServers(unittest.TestCase):
             headers={"Authorization": f"Bearer {self.client.config.api_key}", "content-type": "application/json"},
         )
 
-    @patch_request("status_200")
+    @patch_request("server_ptr_200")
     def test_server_ipv4_ptr(self, patched):
         data = UpdateHost(hostname="example.com")
         result = self.client.update_server_ipv4_ptr(server_id=0, data=data)
-        assert result is None
+        assert result.ptr == "example.jp"
         patched.assert_called_once_with(
-            method="post",
+            method="put",
             url=f"{self.client.config.host}/servers/0/ipv4-ptr",
             headers={"Authorization": f"Bearer {self.client.config.api_key}", "content-type": "application/json"},
             data=data.model_dump_json(exclude_unset=True).encode("utf-8"),
         )
 
-    @patch_request("status_200")
+    @patch_request("server_ptr_200")
     def test_server_ipv6_ptr(self, patched):
         data = UpdateHost(hostname="example.com")
         result = self.client.update_server_ipv6_ptr(server_id=0, data=data)
-        assert result is None
+        assert result.ptr == "example.jp"
         patched.assert_called_once_with(
-            method="post",
+            method="put",
             url=f"{self.client.config.host}/servers/0/ipv6-ptr",
             headers={"Authorization": f"Bearer {self.client.config.api_key}", "content-type": "application/json"},
             data=data.model_dump_json(exclude_unset=True).encode("utf-8"),

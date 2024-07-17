@@ -39,6 +39,10 @@ class UpdateNfsServerIpv4(BaseModel):
     netmask: str = Field(..., description="""サブネットマスク""", examples=["255.255.254.0"])
 
 
+class Ptr(BaseModel):
+    ptr: str = Field(..., description="""逆引きホスト名""", examples=["example.jp"])
+
+
 server_sort_query = Literal[
     "service_code",
     "-service_code",

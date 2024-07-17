@@ -12,6 +12,7 @@ from .models.custom import (
     UpdateNfsServerIpv4,
     CreateSwitch,
     UpdateSwitch,
+    Ptr,
 )
 from .models.generated import Server, ServerPowerStatus, NfsServer, NfsServerPowerStatus, Switch
 from .api_request import APIRequest
@@ -132,8 +133,9 @@ class Client:
         """
         return self.client.request(
             endpoint=f"/servers/{server_id}/ipv4-ptr",
-            method="post",
+            method="put",
             data=data,
+            response_obj=Ptr,
         )
 
     def update_server_ipv6_ptr(self, server_id: int, data: UpdateHost):
@@ -146,8 +148,9 @@ class Client:
         """
         return self.client.request(
             endpoint=f"/servers/{server_id}/ipv6-ptr",
-            method="post",
+            method="put",
             data=data,
+            response_obj=Ptr,
         )
 
     def get_nfs_servers(self) -> List[NfsServer]:
@@ -200,7 +203,7 @@ class Client:
         """
         return self.client.request(
             endpoint=f"/nfs-servers/{nfs_server_id}/ipv4",
-            method="post",
+            method="put",
             data=data,
         )
 
