@@ -36,7 +36,7 @@ class TestServers(unittest.TestCase):
         result = self.client.update_nfs_server_ipv4(nfs_server_id=0, data=data)
         assert result is None
         patched.assert_called_once_with(
-            method="post",
+            method="put",
             url=f"{self.client.config.host}/nfs-servers/0/ipv4",
             headers={"Authorization": f"Bearer {self.client.config.api_key}", "content-type": "application/json"},
             data=data.model_dump_json(exclude_none=True).encode("utf-8"),
