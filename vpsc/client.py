@@ -14,7 +14,7 @@ from .models.custom import (
     UpdateSwitch,
     Ptr,
 )
-from .models.generated import Server, ServerPowerStatus, NfsServer, NfsServerPowerStatus, Switch
+from .models.generated import Server, ServerPowerStatus, NfsServer, NfsServerPowerStatus, Switch, Limitation
 from .api_request import APIRequest
 
 
@@ -151,6 +151,19 @@ class Client:
             method="put",
             data=data,
             response_obj=Ptr,
+        )
+
+    def get_server_limitation(self, server_id: int) -> Limitation:
+        """
+        サーバーの制限情報を取得する
+
+        :param server_id: サーバーID
+        :return:
+        """
+        return self.client.request(
+            endpoint=f"/servers/{server_id}/limitation",
+            method="get",
+            response_obj=Limitation,
         )
 
     def get_nfs_servers(self) -> List[NfsServer]:

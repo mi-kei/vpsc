@@ -1,0 +1,6 @@
+{
+  "cpu_performance_limit": "enabled",
+  "network_bandwidth_limit": "disabled",
+  "outbound_port_25_blocking": "disabled",
+  "storage_iops_limit": "disabled"
+}
