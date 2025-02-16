@@ -42,6 +42,13 @@ def nfs_server():
     """
 
 
+@vpsc.group()
+def apikey():
+    """
+    APIキーのリソースに対する操作
+    """
+
+
 @click.command(name="list")
 @click.option("--server-id", "-id", help="サーバーID", required=False, type=int)
 def get_servers(server_id):
@@ -106,6 +113,13 @@ def update_server_ptr_record(server_id, type_, hostname):
     _print(client.get_server(server_id=server_id))
 
 
+@click.command(name="limitation")
+@click.option("--server-id", "-id", help="サーバーID", required=True, type=int)
+def get_server_limitation(server_id):
+    """サーバーの電源状態を取得"""
+    _print(client.get_server_limitation(server_id=server_id))
+
+
 @click.command(name="list")
 @click.option("--nfs-server-id", "-id", help="NFSサーバーID", required=False, type=int)
 def get_nfs_servers(nfs_server_id):
@@ -145,6 +159,17 @@ def get_nfs_server_power_status(nfs_server_id):
     _print(client.get_nfs_server_power_status(nfs_server_id=nfs_server_id))
 
 
+@click.command(name="list")
+@click.option("--key-id", "-id", help="APIキーID", required=False, type=int)
+def get_api_keys(key_id):
+    """APIキー情報の取得"""
+    if key_id is not None:
+        _print(client.get_api_key(key_id=key_id))
+    else:
+        for item in client.get_api_keys():
+            _print(item)
+
+
 # server commands
 server.add_command(get_servers)
 server.add_command(update_server)
@@ -152,12 +177,16 @@ server.add_command(get_server_power_status)
 server.add_command(power_on_server)
 server.add_command(shutdown_server)
 server.add_command(update_server_ptr_record)
+server.add_command(get_server_limitation)
 
 # nfs server commands
 nfs_server.add_command(get_nfs_servers)
 nfs_server.add_command(update_nfs_server)
 nfs_server.add_command(update_nfs_server_ipv4)
 nfs_server.add_command(get_nfs_server_power_status)
+
+# api key
+apikey.add_command(get_api_keys)
 
 
 def entry_point():

@@ -14,7 +14,7 @@ from .models.custom import (
     UpdateSwitch,
     Ptr,
 )
-from .models.generated import Server, ServerPowerStatus, NfsServer, NfsServerPowerStatus, Switch
+from .models.generated import Server, ServerPowerStatus, NfsServer, NfsServerPowerStatus, Switch, Limitation, ApiKey
 from .api_request import APIRequest
 
 
@@ -45,7 +45,7 @@ class Client:
 
     def get_server(self, server_id: int) -> Server:
         """
-        個別のサーバー情報を取得する
+        サーバー情報を取得する
 
         :param server_id: サーバーID
         :return:
@@ -58,7 +58,7 @@ class Client:
 
     def update_server(self, server_id: int, data: UpdateServer) -> Server:
         """
-        個別のサーバー情報を更新する
+        サーバー情報を更新する
 
         :param server_id: サーバーID
         :param data: 更新データ
@@ -153,6 +153,19 @@ class Client:
             response_obj=Ptr,
         )
 
+    def get_server_limitation(self, server_id: int) -> Limitation:
+        """
+        サーバーの制限情報を取得する
+
+        :param server_id: サーバーID
+        :return:
+        """
+        return self.client.request(
+            endpoint=f"/servers/{server_id}/limitation",
+            method="get",
+            response_obj=Limitation,
+        )
+
     def get_nfs_servers(self) -> List[NfsServer]:
         """
         NFSサーバー情報一覧を取得する
@@ -167,7 +180,7 @@ class Client:
 
     def get_nfs_server(self, nfs_server_id: int) -> NfsServer:
         """
-        個別のNFSサーバー情報を取得する
+        NFSサーバー情報を取得する
 
 
         :param nfs_server_id: NFSサーバーID
@@ -181,7 +194,7 @@ class Client:
 
     def update_nfs_server(self, nfs_server_id: int, data: UpdateNfsServer):
         """
-        個別のNFSサーバー情報を更新する
+        NFSサーバー情報を更新する
         :param nfs_server_id:  NFSサーバーID
         :param data: 更新データ
         :return:
@@ -246,7 +259,7 @@ class Client:
 
     def get_switch(self, switch_id: int) -> Switch:
         """
-        個別のスイッチ情報を取得する
+        スイッチ情報を取得する
 
         :param switch_id: スイッチID
         :return:
@@ -259,7 +272,7 @@ class Client:
 
     def update_switch(self, switch_id: int, data: UpdateSwitch) -> Switch:
         """
-        個別のスイッチ情報を更新する
+        スイッチ情報を更新する
 
         :param switch_id: スイッチID
         :param data: 更新データ
@@ -274,7 +287,7 @@ class Client:
 
     def delete_switch(self, switch_id: int):
         """
-        個別のスイッチを削除する
+        スイッチを削除する
 
         :param switch_id: スイッチID
         :return:
@@ -282,4 +295,29 @@ class Client:
         return self.client.request(
             endpoint=f"/switches/{switch_id}",
             method="delete",
+        )
+
+    def get_api_keys(self) -> List[ApiKey]:
+        """
+        APIキーの一覧を取得する
+
+        :return:
+        """
+        return self.client.request(
+            endpoint=f"/api-keys",
+            method="get",
+            response_obj=ApiKey,
+        )
+
+    def get_api_key(self, key_id: int) -> ApiKey:
+        """
+        APIキーを取得する
+
+        :param key_id:
+        :return:
+        """
+        return self.client.request(
+            endpoint=f"/api-keys/{key_id}",
+            method="get",
+            response_obj=ApiKey,
         )

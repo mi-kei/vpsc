@@ -156,3 +156,16 @@ class TestServers(unittest.TestCase):
             headers={"Authorization": f"Bearer {self.client.config.api_key}", "content-type": "application/json"},
             data=data.model_dump_json(exclude_unset=True).encode("utf-8"),
         )
+
+    @patch_request("server_limitation_200")
+    def test_server_limitation(self, patched):
+        result = self.client.get_server_limitation(server_id=0)
+        assert result.cpu_performance_limit == "enabled"
+        assert result.network_bandwidth_limit == "disabled"
+        assert result.outbound_port_25_blocking == "disabled"
+        assert result.storage_iops_limit == "disabled"
+        patched.assert_called_once_with(
+            method="get",
+            url=f"{self.client.config.host}/servers/0/limitation",
+            headers={"Authorization": f"Bearer {self.client.config.api_key}"},
+        )
