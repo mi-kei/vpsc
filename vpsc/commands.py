@@ -190,6 +190,12 @@ def update_api_key(key_id, name, role_id):
     _print(res)
 
 
+@click.command(name="delete")
+@click.option("--key-id", "-id", help="APIキーID", required=True, type=int)
+def delete_api_key(key_id):
+    client.delete_api_key(key_id=key_id)
+
+
 # server commands
 server.add_command(get_servers)
 server.add_command(update_server)
