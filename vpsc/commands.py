@@ -3,11 +3,12 @@ VPSC のコマンド一覧です
 """
 
 from time import sleep
+from xmlrpc.client import Fault
 
 import click
 from pydantic import BaseModel
 
-from .models.custom import UpdateServer, UpdateHost, UpdateNfsServer, UpdateNfsServerIpv4
+from .models.custom import UpdateServer, UpdateHost, UpdateNfsServer, UpdateNfsServerIpv4, UpdateApiKey, CreateApiKey
 from .exceptions import exception_handler, APIException
 from .client import APIConfig, Client
 
@@ -170,6 +171,31 @@ def get_api_keys(key_id):
             _print(item)
 
 
+@click.command(name="create")
+@click.option("--name", "-n", help="名前", required=False, type=str, default="")
+@click.option("--role-id", "-rid", help="ロールID", required=True, type=int)
+def create_api_key(name, role_id):
+    data = CreateApiKey(name=name, role=role_id)
+    res = client.create_api_key(data=data)
+    _print(res)
+
+
+@click.command(name="update")
+@click.option("--key-id", "-id", help="APIキーID", required=True, type=int)
+@click.option("--name", "-n", help="名前", required=False, type=str, default="")
+@click.option("--role-id", "-rid", help="ロールID", required=True, type=int)
+def update_api_key(key_id, name, role_id):
+    data = UpdateApiKey(name=name, role=role_id)
+    res = client.update_api_key(key_id=key_id, data=data)
+    _print(res)
+
+
+@click.command(name="delete")
+@click.option("--key-id", "-id", help="APIキーID", required=True, type=int)
+def delete_api_key(key_id):
+    client.delete_api_key(key_id=key_id)
+
+
 # server commands
 server.add_command(get_servers)
 server.add_command(update_server)
@@ -185,8 +211,12 @@ nfs_server.add_command(update_nfs_server)
 nfs_server.add_command(update_nfs_server_ipv4)
 nfs_server.add_command(get_nfs_server_power_status)
 
+# TODO: switch
+
 # api key
 apikey.add_command(get_api_keys)
+apikey.add_command(create_api_key)
+apikey.add_command(update_api_key)
 
 
 def entry_point():
