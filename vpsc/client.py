@@ -3,6 +3,7 @@ from typing import Optional, Iterable, List
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+from models.custom import UpdateApiKey, CreateRole, UpdateRole
 from .models.custom import (
     server_sort_query,
     UpdateServer,
@@ -14,7 +15,17 @@ from .models.custom import (
     UpdateSwitch,
     Ptr,
 )
-from .models.generated import Server, ServerPowerStatus, NfsServer, NfsServerPowerStatus, Switch, Limitation, ApiKey
+from .models.generated import (
+    Server,
+    ServerPowerStatus,
+    NfsServer,
+    NfsServerPowerStatus,
+    Switch,
+    Limitation,
+    ApiKey,
+    Role,
+    Permission,
+)
 from .api_request import APIRequest
 
 
@@ -166,7 +177,7 @@ class Client:
             response_obj=Limitation,
         )
 
-    def get_nfs_servers(self) -> List[NfsServer]:
+    def get_nfs_servers(self) -> Iterable[NfsServer]:
         """
         NFSサーバー情報一覧を取得する
 
@@ -245,7 +256,7 @@ class Client:
             response_obj=Switch,
         )
 
-    def get_switches(self) -> List[Switch]:
+    def get_switches(self) -> Iterable[Switch]:
         """
         スイッチ情報一覧を取得する
 
@@ -297,7 +308,7 @@ class Client:
             method="delete",
         )
 
-    def get_api_keys(self) -> List[ApiKey]:
+    def get_api_keys(self) -> Iterable[ApiKey]:
         """
         APIキーの一覧を取得する
 
@@ -320,4 +331,108 @@ class Client:
             endpoint=f"/api-keys/{key_id}",
             method="get",
             response_obj=ApiKey,
+        )
+
+    def update_api_key(self, key_id: int, data: UpdateApiKey) -> ApiKey:
+        """
+        APIキーを更新する
+
+        :param key_id:
+        :return:
+        """
+        return self.client.request(
+            endpoint=f"/api-keys/{key_id}",
+            method="put",
+            data=data,
+            response_obj=ApiKey,
+        )
+
+    def delete_api_key(self, key_id: int) -> ApiKey:
+        """
+        APIキーを削除する
+
+        :param key_id:
+        :return:
+        """
+        return self.client.request(
+            endpoint=f"/api-keys/{key_id}",
+            method="delete",
+        )
+
+    def rotate_api_key(self, key_id: int) -> ApiKey:
+        """
+        APIキーのトークンのローテーションを行う
+
+        :param key_id:
+        :return:
+        """
+        return self.client.request(
+            endpoint=f"/api-keys/{key_id}",
+            method="put",
+            response_obj=ApiKey,
+        )
+
+    def create_role(self, data: CreateRole) -> Role:
+        """
+        ロールを作成する
+
+        :return:
+        """
+        return self.client.request(
+            endpoint=f"/roles",
+            method="post",
+            data=data,
+            response_obj=Role,
+        )
+
+    def get_role(self, role_id: int) -> Role:
+        """
+        ロールを取得する
+
+        :param role_id:
+        :return:
+        """
+        return self.client.request(
+            endpoint=f"/roles/{role_id}",
+            method="get",
+            response_obj=Role,
+        )
+
+    def update_role(self, role_id: int, data: UpdateRole) -> Role:
+        """
+        ロールを更新する
+
+        :param role_id:
+        :param data:
+        :return:
+        """
+        return self.client.request(
+            endpoint=f"/roles/{role_id}",
+            method="put",
+            data=data,
+            response_obj=Role,
+        )
+
+    def delete_role(self, role_id: int) -> Role:
+        """
+        ロールを削除する
+
+        :param role_id:
+        :return:
+        """
+        return self.client.request(
+            endpoint=f"/roles/{role_id}",
+            method="delete",
+        )
+
+    def get_permissions(self) -> Iterable[Permission]:
+        """
+        権限の一覧を取得する
+
+        :return:
+        """
+        return self.client.request(
+            endpoint=f"/permissions",
+            method="get",
+            response_obj=Permission,
         )
