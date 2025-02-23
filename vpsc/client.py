@@ -3,7 +3,6 @@ from typing import Optional, Iterable, List
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-from models.custom import UpdateApiKey, CreateRole, UpdateRole
 from .models.custom import (
     server_sort_query,
     UpdateServer,
@@ -14,6 +13,10 @@ from .models.custom import (
     CreateSwitch,
     UpdateSwitch,
     Ptr,
+    UpdateApiKey,
+    CreateRole,
+    UpdateRole,
+    CreateApiKey,
 )
 from .models.generated import (
     Server,
@@ -330,6 +333,20 @@ class Client:
         return self.client.request(
             endpoint=f"/api-keys/{key_id}",
             method="get",
+            response_obj=ApiKey,
+        )
+
+    def create_api_key(self, data: CreateApiKey) -> ApiKey:
+        """
+        APIキーを作成する
+
+        :param data:
+        :return:
+        """
+        return self.client.request(
+            endpoint=f"/api-keys",
+            method="post",
+            data=data,
             response_obj=ApiKey,
         )
 

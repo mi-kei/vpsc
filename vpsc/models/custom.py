@@ -43,6 +43,11 @@ class Ptr(BaseModel):
     ptr: str = Field(..., description="""逆引きホスト名""", examples=["example.jp"])
 
 
+class CreateApiKey(BaseModel):
+    name: constr(max_length=100) = Field(..., description="""名前""")
+    role: int = Field(..., description="""ロールID""")
+
+
 class UpdateApiKey(BaseModel):
     name: constr(max_length=100) = Field(..., description="""名前""")
     role: int = Field(..., description="""ロールID""")
@@ -69,8 +74,19 @@ class CreateRole(BaseModel):
     )
 
 
-class UpdateRole(BaseModel, CreateRole):
-    pass
+class UpdateRole(BaseModel):
+    name: constr(max_length=100) = Field(..., description="""名前""")
+    description: constr(max_length=512) = Field(..., description="""説明""")
+    permission_filtering: Literal["enabled", "disabled"] = Field(..., description="""利用できる権限を制限するか""")
+    allowed_permissions: List[str] = Field(
+        ...,
+        description="""利用できる権限。permission_filteringがenabledの場合のみ指定可能。**権限の一覧を取得する**`/permissions`のcode値を指定します。""",
+        examples=[["get-server-list", "get-server", "put-server"]],
+    )
+    resource_filtering: Literal["enabled", "disabled"] = Field(..., description="""利用できるリソースを制限するか""")
+    allowed_resources: Optional[CreateAllowedResources] = Field(
+        ..., description="""利用できるリソース。resource_filteringがenabledの場合のみ指定可能。"""
+    )
 
 
 server_sort_query = Literal[
